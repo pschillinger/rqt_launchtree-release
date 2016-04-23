@@ -1,0 +1,14 @@
+ros-indigo-rqt-launchtree (0.1.1-0trusty) trusty; urgency=high
+
+
+
+ -- Philipp Schillinger <philipp.schillinger@de.bosch.com>  Fri, 22 Apr 2016 22:00:00 -0000
+
+ros-indigo-rqt-launchtree (0.1.0-0trusty) trusty; urgency=high
+
+  * Initial release
+  * Contributors: Philipp Schillinger
+
+ -- Philipp Schillinger <philipp.schillinger@de.bosch.com>  Fri, 22 Apr 2016 22:00:00 -0000
+
+
