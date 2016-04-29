@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <package>
   <name>rqt_launchtree</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <description>
     An RQT plugin for hierarchical launchfile configuration introspection.
   </description>
 
-  <maintainer email="philipp.schillinger@de.bosch.com">Philipp Schillinger</maintainer>
+  <maintainer email="schillin@kth.se">Philipp Schillinger</maintainer>
   <license>BSD</license>
 
   <url type="website">http://ros.org/wiki/rqt_launchtree</url>
