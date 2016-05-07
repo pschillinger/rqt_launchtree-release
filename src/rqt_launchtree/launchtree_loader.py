@@ -34,6 +34,18 @@ class LaunchtreeLoader(XmlLoader):
 		ros_config.pop_level()
 		return result
 
+	def _rosparam_tag(self, tag, context, ros_config, verbose):
+		param_file = tag.attributes['file'].value \
+			if tag.attributes.has_key('file') else ''
+		if param_file != '': 
+			param_filename = self.resolve_args(param_file, context)
+			level_name = ros_config.push_level(param_filename, unique=True)
+		result = super(LaunchtreeLoader, self)._rosparam_tag(tag, context, ros_config, verbose)
+		if param_file != '': 
+			ros_config.pop_level()
+			context.add_rosparam(tag.attributes.get('command', 'load'), param_filename, level_name)
+		return result
+
 	def _load_launch(self, launch, ros_config, is_core=False, filename=None, argv=None, verbose=True):
 		if argv is None:
 			argv = sys.argv
