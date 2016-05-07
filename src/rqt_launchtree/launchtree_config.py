@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from roslaunch.config import ROSLaunchConfig
+from roslaunch.core import Param
 
 class LaunchtreeArg(object):
 	def __init__(self, name, default=None, value=None, doc=None):
@@ -21,6 +22,16 @@ class LaunchtreeRemap(object):
 		self.from_topic = from_topic
 		self.to_topic = to_topic
 
+class LaunchtreeParam(Param):
+	def __init__(self, key, value, command):
+		super(LaunchtreeParam, self).__init__(key, value)
+		self.command = command
+
+class LaunchtreeRosparam(object):
+	def __init__(self, command, filename):
+		self.command = command
+		self.filename = filename
+
 class LaunchtreeConfig(ROSLaunchConfig):
 
 	def __init__(self):
@@ -35,6 +46,7 @@ class LaunchtreeConfig(ROSLaunchConfig):
 			tree_level += ':%d' % self.idx
 			self.idx += 1
 		self._tree_stack.append(tree_level)
+		return tree_level
 
 	def pop_level(self):
 		return self._tree_stack.pop()
@@ -58,7 +70,7 @@ class LaunchtreeConfig(ROSLaunchConfig):
 		self._add_to_tree(exe.command, exe)
 		return result
 
-	def add_param(self, p, filename=None, verbose=True):
+	def add_param(self, p, filename=None, verbose=True, command=None):
 		p.inconsistent = False
 		if p.key in self.params and (p.value != self.params[p.key].value or self.params[p.key].inconsistent):
 			p.inconsistent = True
@@ -89,3 +101,6 @@ class LaunchtreeConfig(ROSLaunchConfig):
 
 	def add_remap(self, from_topic, to_topic):
 		self._add_to_tree(from_topic, LaunchtreeRemap(from_topic, to_topic))
+
+	def add_rosparam(self, command, filename, unique_name):
+		self._add_to_tree(unique_name, LaunchtreeRosparam(command, filename))
