@@ -10,7 +10,7 @@ import rospkg
 import roslaunch
 
 from rqt_launchtree.launchtree_loader import LaunchtreeLoader
-from rqt_launchtree.launchtree_config import LaunchtreeConfig, LaunchtreeArg, LaunchtreeRemap
+from rqt_launchtree.launchtree_config import LaunchtreeConfig, LaunchtreeArg, LaunchtreeRemap, LaunchtreeParam, LaunchtreeRosparam
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, Signal
@@ -41,6 +41,7 @@ class LaunchtreeWidget(QWidget):
 		super(LaunchtreeWidget, self).__init__()
 
 		self._rp = rospkg.RosPack()
+		self._rp_package_list = self._rp.list()
 		res_folder = os.path.join(self._rp.get_path('rqt_launchtree'), 'resource')
 		ui_file = os.path.join(res_folder, 'launchtree_widget.ui')
 		loadUi(ui_file, self)
@@ -58,6 +59,7 @@ class LaunchtreeWidget(QWidget):
 		self._icon_param = QIcon(os.path.join(res_folder, 'img/param.png'))
 		self._icon_arg = QIcon(os.path.join(res_folder, 'img/arg.png'))
 		self._icon_remap = QIcon(os.path.join(res_folder, 'img/remap.png'))
+		self._icon_rosparam = QIcon(os.path.join(res_folder, 'img/rosparam_load.png'))
 		self._icon_default = QIcon(os.path.join(res_folder, 'img/default.png'))
 		self._icon_warn = QIcon(os.path.join(res_folder, 'img/warn.png'))
 		self._launch_separator = '  --  '
@@ -143,13 +145,15 @@ class LaunchtreeWidget(QWidget):
 				i.setText(0, self._filename_to_label(key.split(':')[0]))
 				i.setIcon(0, self._icon_include if not i.inconsistent else self._icon_warn)
 			else:
-				i.setText(0, key)
+				i.setText(0, self._filename_to_label(key.split(':')[0]) if isinstance(i.instance, LaunchtreeRosparam) else
+					key)
 				i.setIcon(0, 
 					self._icon_warn if i.inconsistent else 
 					self._icon_node if isinstance(i.instance, roslaunch.core.Node) else 
 					self._icon_param if isinstance(i.instance, roslaunch.core.Param) else 
 					self._icon_arg if isinstance(i.instance, LaunchtreeArg) else 
 					self._icon_remap if isinstance(i.instance, LaunchtreeRemap) else 
+					self._icon_rosparam if isinstance(i.instance, LaunchtreeRosparam) else 
 					self._icon_default)
 			items.append(i)
 		return items
@@ -171,7 +175,7 @@ class LaunchtreeWidget(QWidget):
 	def update_package_list(self):
 		self._package_list = sorted(
 			filter(lambda p: len(self._get_launch_files(self._rp.get_path(p)))>0,
-				self._rp.list()
+				self._rp_package_list
 			)
 		)
 		self.package_select.clear()
@@ -215,7 +219,11 @@ class LaunchtreeWidget(QWidget):
 		if isinstance(data, roslaunch.core.Param):
 			self.properties_content.setCurrentIndex(1)
 			self.param_name.setText(data.key.split('/')[-1] + ':')
-			if len(str(data.value)) < 100:
+			if isinstance(data.value, list):
+				self.param_value_list.clear()
+				self.param_value_list.addItems(list(str(v) for v in data.value))
+				self.param_value_panel.setCurrentIndex(2)
+			elif len(str(data.value)) < 100:
 				self.param_value.setText(str(data.value))
 				self.param_value_panel.setCurrentIndex(0)
 			else:
@@ -252,12 +260,24 @@ class LaunchtreeWidget(QWidget):
 			self.machine_user.setEnabled(data.user is not None)
 			self.machine_loader.setText(str(data.env_loader) if data.env_loader is not None else '')
 			self.machine_loader.setEnabled(data.env_loader is not None)
+		elif isinstance(data, LaunchtreeRosparam):
+			self.properties_content.setCurrentIndex(3)
+			path_segments = self.launch_view.currentItem().text(0).split(self._launch_separator)
+			if len(path_segments) == 2:
+				(p, l) = path_segments
+				(d, f) = os.path.split(l)
+			else:
+				p = None
+				f = path_segments[0]
+			self.file_package.setText(p if p is not None else '')
+			self.file_package.setEnabled(p is not None)
+			self.file_name.setText(f)
 		elif isinstance(data, dict):
 			self.properties_content.setCurrentIndex(3)
 			(p, l) = self.launch_view.currentItem().text(0).split(self._launch_separator)
 			(d, f) = os.path.split(l)
-			self.launch_package.setText(p)
-			self.launch_file.setText(f)
+			self.file_package.setText(p)
+			self.file_name.setText(f)
 
 
 		else:
@@ -328,7 +348,8 @@ class LaunchtreeWidget(QWidget):
 	def _filename_to_label(self, filename):
 		tail = list()
 		for d in reversed(filename.split('/')):
-			if d in self._package_list:
+			if d in self._rp_package_list:
 				return '%s%s%s' % (d, self._launch_separator, '/'.join(reversed(tail)))
 			else:
 				tail.append(d)
+		return filename
