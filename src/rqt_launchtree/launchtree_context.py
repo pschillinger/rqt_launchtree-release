@@ -19,6 +19,10 @@ class LaunchtreeContext(LoaderContext):
 			self._config.add_remap(remap[0], remap[1])
 		return result
 
+	def add_rosparam(self, command, filename, unique_name):
+		if self._config is not None:
+			self._config.add_rosparam(command, filename, unique_name)
+
 	def child(self, ns):
 		result = super(LaunchtreeContext, self).child(ns)
 		return LaunchtreeContext(result.ns, result.filename, self._config, result.parent, result.params, result.env_args, result.resolve_dict, result.include_resolve_dict, result.arg_names)
