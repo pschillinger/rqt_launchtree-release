@@ -17,7 +17,7 @@ from python_qt_binding.QtCore import Qt, Signal
 from python_qt_binding.QtGui import QFileDialog, QWidget, QIcon, QTreeWidgetItem, QColor
 
 class LaunchtreeEntryItem(QTreeWidgetItem):
-	_type_order = [dict, roslaunch.core.Node, LaunchtreeArg, roslaunch.core.Param, LaunchtreeRemap, object]
+	_type_order = [dict, roslaunch.core.Node, LaunchtreeRosparam, roslaunch.core.Param, LaunchtreeRemap, LaunchtreeArg, object]
 	#inconsistent = False
 	def __init__(self, *args, **kw ):
 		super(LaunchtreeEntryItem, self).__init__(*args, **kw)
@@ -146,7 +146,7 @@ class LaunchtreeWidget(QWidget):
 				i.setIcon(0, self._icon_include if not i.inconsistent else self._icon_warn)
 			else:
 				i.setText(0, self._filename_to_label(key.split(':')[0]) if isinstance(i.instance, LaunchtreeRosparam) else
-					key)
+					key.split(':')[0])
 				i.setIcon(0, 
 					self._icon_warn if i.inconsistent else 
 					self._icon_node if isinstance(i.instance, roslaunch.core.Node) else 
@@ -301,6 +301,9 @@ class LaunchtreeWidget(QWidget):
 				show = show_params
 			# node
 			elif isinstance(entry.instance, roslaunch.core.Node):
+				show = show_nodes
+			# machine (no separate option to display machines, is coupled to nodes)
+			elif isinstance(entry.instance, roslaunch.core.Machine):
 				show = show_nodes
 			# arg
 			elif isinstance(entry.instance, LaunchtreeArg):
