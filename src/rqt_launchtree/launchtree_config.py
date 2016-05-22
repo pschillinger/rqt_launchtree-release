@@ -56,12 +56,21 @@ class LaunchtreeConfig(ROSLaunchConfig):
 		for launch in self._tree_stack:
 			if not launch in level:
 				level[launch] = dict()
+			elif not isinstance(level[launch], dict):
+				old_instance = level[launch]
+				level[launch] = dict()
+				level[launch + ':%d' % self.idx] = old_instance
+				self.idx += 1
 			level = level[launch]
 		if level.has_key(key):
-			if isinstance(level[key], dict):
+			if isinstance(level[key], dict) and not '_root' in level[key]:
+				# this assumes that the root is added right after its children
 				level[key]['_root'] = instance
-			if isinstance(level[key], LaunchtreeArg):
+			elif isinstance(instance, LaunchtreeArg) and isinstance(level[key], LaunchtreeArg):
 				level[key].merge(instance)
+			else:
+				level[key + ':%d' % self.idx] = instance
+				self.idx += 1
 		else:
 			level[key] = instance
 
