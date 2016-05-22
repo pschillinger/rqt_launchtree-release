@@ -1,0 +1,12 @@
+Source: ros-indigo-rqt-launchtree
+Section: misc
+Priority: extra
+Maintainer: Philipp Schillinger <schillin@kth.se>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin
+Homepage: http://ros.org/wiki/rqt_launchtree
+Standards-Version: 3.9.2
+
+Package: ros-indigo-rqt-launchtree
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-indigo-roslaunch, ros-indigo-rospy, ros-indigo-rqt-gui, ros-indigo-rqt-gui-py
+Description: An RQT plugin for hierarchical launchfile configuration introspection.
