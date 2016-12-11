@@ -46,6 +46,8 @@ class LaunchtreeWidget(QWidget):
 		ui_file = os.path.join(res_folder, 'launchtree_widget.ui')
 		loadUi(ui_file, self)
 
+		self._block_load = True
+
 		self.editor = 'gedit' # configure via settings
 
 		self.setObjectName('LaunchtreeWidget')
@@ -95,8 +97,13 @@ class LaunchtreeWidget(QWidget):
 		self.update_package_list()
 		
 
+	def block_load(self, do_block):
+		self._block_load = do_block
+
 	def load_launchfile(self):
+		if self._block_load: return
 		self.launch_view.clear()
+		self.properties_content.setCurrentIndex(0)
 		self.main_view.setCurrentIndex(0)
 		filename = os.path.join(
 			self._rp.get_path(self.package_select.currentText()),
