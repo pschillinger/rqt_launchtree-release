@@ -1,0 +1,12 @@
+Source: ros-kinetic-rqt-launchtree
+Section: misc
+Priority: extra
+Maintainer: Philipp Schillinger <schillin@kth.se>
+Build-Depends: debhelper (>= 9.0.0), ros-kinetic-catkin
+Homepage: http://ros.org/wiki/rqt_launchtree
+Standards-Version: 3.9.2
+
+Package: ros-kinetic-rqt-launchtree
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kinetic-roslaunch, ros-kinetic-rospy, ros-kinetic-rqt-gui, ros-kinetic-rqt-gui-py
+Description: An RQT plugin for hierarchical launchfile configuration introspection.
