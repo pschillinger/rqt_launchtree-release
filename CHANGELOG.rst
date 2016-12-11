@@ -2,12 +2,13 @@
 Changelog for package rqt_launchtree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.1.5 (2016-12-11)
+0.2.0 (2016-12-11)
 ------------------
-* Merge branch '130s-impr/save_status'
+* Merge branch '130s-impr/save_status' into kinetic
 * Store pkg name instead of index and also remember launch args
 * Save and restore last pkg and launch file (address `#4 <https://github.com/pschillinger/rqt_launchtree/issues/4>`_).
 * Hide old properties if new file is loaded
+* Adapted changes of pyqt5
 * Contributors: Isaac I.Y. Saito, Philipp Schillinger
 
 0.1.4 (2016-05-22)

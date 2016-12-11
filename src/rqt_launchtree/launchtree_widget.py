@@ -14,7 +14,8 @@ from rqt_launchtree.launchtree_config import LaunchtreeConfig, LaunchtreeArg, La
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, Signal
-from python_qt_binding.QtGui import QFileDialog, QWidget, QIcon, QTreeWidgetItem, QColor
+from python_qt_binding.QtGui import QIcon, QColor, QBrush
+from python_qt_binding.QtWidgets import QWidget, QFileDialog, QTreeWidgetItem
 
 class LaunchtreeEntryItem(QTreeWidgetItem):
 	_type_order = [dict, roslaunch.core.Node, LaunchtreeRosparam, roslaunch.core.Param, LaunchtreeRemap, LaunchtreeArg, object]
@@ -30,6 +31,8 @@ class LaunchtreeEntryItem(QTreeWidgetItem):
 		return self.text(0) >= other.text(0)
 	def __lt__(self, other):
 		return not self.__ge__(other)
+	def setBackgroundColor(self, column, color):
+		self.setBackground(column, QBrush(color))
 
 
 class LaunchtreeWidget(QWidget):
