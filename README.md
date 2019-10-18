@@ -1,3 +1,26 @@
+## rqt_launchtree (melodic) - 0.2.0-1
+
+The packages in the `rqt_launchtree` repository were released into the `melodic` distro by running `/usr/bin/bloom-release --rosdistro melodic --track melodic rqt_launchtree` on `Fri, 18 Oct 2019 11:35:55 -0000`
+
+The `rqt_launchtree` package was released.
+
+Version of package(s) in repository `rqt_launchtree`:
+
+- upstream repository: https://github.com/pschillinger/rqt_launchtree.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.2.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.8.0`
+- catkin_pkg version: `0.4.14`
+- rosdep version: `0.16.1`
+- rosdistro version: `0.7.5`
+- vcstools version: `0.1.42`
+
+
 ## rqt_launchtree (kinetic) - 0.2.0-0
 
 The packages in the `rqt_launchtree` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release --rosdistro kinetic --track kinetic rqt_launchtree` on `Sun, 11 Dec 2016 22:37:31 -0000`
