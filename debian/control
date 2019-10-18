@@ -1,0 +1,12 @@
+Source: ros-melodic-rqt-launchtree
+Section: misc
+Priority: extra
+Maintainer: Philipp Schillinger <schillin@kth.se>
+Build-Depends: debhelper (>= 9.0.0), ros-melodic-catkin
+Homepage: http://ros.org/wiki/rqt_launchtree
+Standards-Version: 3.9.2
+
+Package: ros-melodic-rqt-launchtree
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-melodic-roslaunch, ros-melodic-rospy, ros-melodic-rqt-gui, ros-melodic-rqt-gui-py
+Description: An RQT plugin for hierarchical launchfile configuration introspection.
